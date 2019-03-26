@@ -176,36 +176,76 @@ void arr_insert(Array *arr, char *element, int index)
  *
  * Throw an error if the value is not found.
  *****/
-// void arr_remove(Array *arr, char *element)
-// {
+void arr_remove(Array *arr, char *element)
+{
+  // Search for the first occurence of the element and remove it.
+  // Don't forget to free its memory!
 
-//   // Search for the first occurence of the element and remove it.
-//   // Don't forget to free its memory!
-//   int found = -1;
-//   for (int i = 0; i < arr->count; i++)
-//   {
-//     int string_match = strcmp(element, arr->elements[i]);
-//     if (string_match == 0)
-//     {
-//       found = i;
-//       break;
-//     }
-//   }
+  // if (arr->count == 0)
+  // {
+  //   perror("Item not found");
+  // }
+  if (arr->count == 1)
+  {
+    if (strcmp(element, arr->head->value) == 0)
+    {
+      free(arr->head);
+      arr->head = NULL;
+      arr->tail = NULL;
+      // Decrement count by 1
+      arr->count--;
+    }
+    // else
+    // {
+    //   perror("Item not found");
+    // }
+  }
+  else if (arr->count > 1)
+  // handle cases where count > 1
+  {
+    // handle case where first element matches search string
+    if (strcmp(element, arr->head->value) == 0)
+    {
+      Node *old_head = arr->head;
+      arr->head = arr->head->next;
+      free(old_head);
+      arr->count--;
+    }
+    else
+    {
 
-//   if (found == -1)
-//   {
-//     perror("Item not found");
-//     exit(1);
-//   }
-//   // Shift over every element after the removed element to the left one position
-//   for (int j = found; j < arr->count - 1; j++)
-//   {
-//     arr->elements[j] = arr->elements[j + 1];
-//   }
+      Node *prev = arr->head;
+      Node *current = arr->head->next;
+      int found = 0;
 
-//   // Decrement count by 1
-//   arr->count--;
-// }
+      while (current && !found)
+      {
+        int string_match = strcmp(element, current->value);
+        if (string_match == 0)
+        {
+          found = 1;
+        }
+        else
+        {
+          prev = current;
+          current = current->next;
+        }
+      }
+      if (found)
+      {
+        prev->next = current->next;
+        free(current);
+
+        // Decrement count by 1
+        arr->count--;
+      }
+      // else
+      // {
+      //   perror("Item not found");
+      // }
+    }
+  }
+}
 
 /*****
  * Utility function to print an array.
@@ -231,38 +271,44 @@ int main(void)
 {
 
   Array *arr = create_array();
-  // arr_append(arr, "test0");
-  // arr_append(arr, "test1");
-  // arr_append(arr, "test2");
-  // arr_append(arr, "test3");
-  // arr_append(arr, "test4");
-  // arr_append(arr, "test5");
-  // arr_append(arr, "test6");
-  // arr_append(arr, "test7");
-  // arr_append(arr, "test8");
-  // arr_append(arr, "test9");
-  // arr_append(arr, "test10");
-  // arr_append(arr, "test11");
-  // arr_append(arr, "test12");
-  // arr_append(arr, "test13");
-  // arr_append(arr, "test14");
-  // arr_append(arr, "test15");
-
-  // arr_insert(arr, "insert at 4", 4);
-  // arr_insert(arr, "insert at 0", 0);
-
-  // arr_remove(arr, "insert at 0");
-  // arr_remove(arr, "insert at 4");
-
-  // arr_print(arr);
 
   arr_insert(arr, "STRING1", 0);
   arr_append(arr, "STRING4");
   arr_insert(arr, "STRING2", 0);
   arr_insert(arr, "STRING3", 1);
   arr_print(arr);
-  // arr_remove(arr, "STRING3");
-  // arr_print(arr);
+  arr_remove(arr, "STRING3");
+  arr_print(arr);
+  arr_remove(arr, "STRING2");
+  arr_print(arr);
+  arr_remove(arr, "STRING1");
+  arr_print(arr);
+  arr_remove(arr, "STRING4");
+  arr_print(arr);
+  arr_remove(arr, "STRING4");
+  arr_print(arr);
+  arr_append(arr, "test0");
+  arr_append(arr, "test1");
+  arr_append(arr, "test2");
+  arr_append(arr, "test3");
+  arr_append(arr, "test4");
+  arr_append(arr, "test5");
+  arr_append(arr, "test6");
+  arr_append(arr, "test7");
+  arr_append(arr, "test8");
+  arr_append(arr, "test9");
+  arr_append(arr, "test10");
+  arr_append(arr, "test11");
+  arr_append(arr, "test12");
+  arr_append(arr, "test13");
+  arr_append(arr, "test14");
+  arr_append(arr, "test15");
+  arr_insert(arr, "insert at 4", 4);
+  arr_insert(arr, "insert at 0", 0);
+  arr_print(arr);
+  arr_remove(arr, "insert at 0");
+  arr_remove(arr, "insert at 4");
+  arr_print(arr);
 
   destroy_array(arr);
 
